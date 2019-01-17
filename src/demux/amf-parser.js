@@ -48,6 +48,9 @@ class AMF {
             throw new IllegalStateException('Data not enough when parse ScriptDataObject');
         }
         let name = AMF.parseString(arrayBuffer, dataOffset, dataSize);
+        if (name.data === 'videocodecid') {
+            ++name.size;
+        }
         let value = AMF.parseValue(arrayBuffer, dataOffset + name.size, dataSize - name.size);
         let isObjectEnd = value.objectEnd;
 
@@ -135,17 +138,17 @@ class AMF {
         try {
             switch (type) {
                 case 0:  // Number(Double) type
-                    value = v.getFloat64(1, !le);
+                    value = v.getFloat64(offset, !le);
                     offset += 8;
                     break;
                 case 1: {  // Boolean type
-                    let b = v.getUint8(1);
+                    let b = v.getUint8(offset);
                     value = b ? true : false;
                     offset += 1;
                     break;
                 }
                 case 2: {  // String type
-                    let amfstr = AMF.parseString(arrayBuffer, dataOffset + 1, dataSize - 1);
+                    let amfstr = AMF.parseString(arrayBuffer, dataOffset + offset, dataSize - offset);
                     value = amfstr.data;
                     offset += amfstr.size;
                     break;
@@ -211,13 +214,13 @@ class AMF {
                     break;
                 }
                 case 11: {  // Date type
-                    let date = AMF.parseDate(arrayBuffer, dataOffset + 1, dataSize - 1);
+                    let date = AMF.parseDate(arrayBuffer, dataOffset + offset, dataSize - offset);
                     value = date.data;
                     offset += date.size;
                     break;
                 }
                 case 12: {  // Long string type
-                    let amfLongStr = AMF.parseString(arrayBuffer, dataOffset + 1, dataSize - 1);
+                    let amfLongStr = AMF.parseString(arrayBuffer, dataOffset + offset, dataSize - offset);
                     value = amfLongStr.data;
                     offset += amfLongStr.size;
                     break;

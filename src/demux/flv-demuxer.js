@@ -107,6 +107,8 @@ class FLVDemuxer {
         this._videoTrack = {type: 'video', id: 1, sequenceNumber: 0, samples: [], length: 0};
         this._audioTrack = {type: 'audio', id: 2, sequenceNumber: 0, samples: [], length: 0};
 
+        this.firstParseTimestamp = null;
+
         this._littleEndian = (function () {
             let buf = new ArrayBuffer(2);
             (new DataView(buf)).setInt16(0, 256, true);  // little-endian write
@@ -340,10 +342,12 @@ class FLVDemuxer {
                     this._parseAudioData(chunk, dataOffset, dataSize, timestamp);
                     break;
                 case 9:  // Video
+                    if (this.firstParseTimestamp === null)
+                        this.firstParseTimestamp = timestamp;
                     this._parseVideoData(chunk, dataOffset, dataSize, timestamp, byteStart + offset);
                     break;
                 case 18:  // ScriptDataObject
-                    this._parseScriptData(chunk, dataOffset, dataSize);
+                    this._parseScriptData(chunk, dataOffset + 12, dataSize);
                     break;
             }
 
