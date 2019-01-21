@@ -122,8 +122,8 @@
                 let milltime = creationTime +
                     player.currentTime*1000 +
                     player._transmuxer._controller._demuxer.firstParseTimestamp;
-                document.getElementById('videoTime').innerText = (new Date(milltime));
-            }, 1000)
+                document.getElementById('videoTime').innerText = (new Date(milltime)) + (milltime);
+            }, 25)
         }
 
         function flv_pause() {

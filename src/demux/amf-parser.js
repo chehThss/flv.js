@@ -48,9 +48,6 @@ class AMF {
             throw new IllegalStateException('Data not enough when parse ScriptDataObject');
         }
         let name = AMF.parseString(arrayBuffer, dataOffset, dataSize);
-        if (name.data === 'videocodecid') {
-            ++name.size;
-        }
         let value = AMF.parseValue(arrayBuffer, dataOffset + name.size, dataSize - name.size);
         let isObjectEnd = value.objectEnd;
 
