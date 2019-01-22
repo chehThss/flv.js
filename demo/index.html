@@ -109,8 +109,14 @@
                 lazyLoadMaxDuration: 3 * 60,
                 seekType: 'range',
             });
-            player.on(flvjs.Events.METADATA_ARRIVED, (meta,) => {
+            player.on(flvjs.Events.METADATA_ARRIVED, meta => {
                 creationTime = Date.parse(meta.creation_time);
+            });
+            player.on(flvjs.Events.FIRST_VIDEO_TAG_ARRIVED, timestamp => {
+                setInterval(() => {
+                    let milltime = creationTime + player.currentTime*1000 + timestamp;
+                    document.getElementById('videoTime').innerText = (new Date(milltime)) + (milltime);
+                }, 25)
             });
             player.attachMediaElement(element);
             player.load();
@@ -118,12 +124,6 @@
 
         function flv_start() {
             player.play();
-            setInterval(() => {
-                let milltime = creationTime +
-                    player.currentTime*1000 +
-                    player._transmuxer._controller._demuxer.firstParseTimestamp;
-                document.getElementById('videoTime').innerText = (new Date(milltime)) + (milltime);
-            }, 25)
         }
 
         function flv_pause() {

@@ -22,6 +22,8 @@ import SPSParser from './sps-parser.js';
 import DemuxErrors from './demux-errors.js';
 import MediaInfo from '../core/media-info.js';
 import {IllegalStateException} from '../utils/exception.js';
+import EventEmitter from 'events';
+import DemuxerEvents from './demuxer-events.js';
 
 function Swap16(src) {
     return (((src >>> 8) & 0xFF) |
@@ -56,6 +58,7 @@ class FLVDemuxer {
         this._onScriptDataArrived = null;
         this._onTrackMetadata = null;
         this._onDataAvailable = null;
+        this._emitter = new EventEmitter();
 
         this._dataOffset = probeData.dataOffset;
         this._firstParse = true;
@@ -124,12 +127,18 @@ class FLVDemuxer {
         this._videoTrack = null;
         this._audioTrack = null;
 
+        this._emitter.removeAllListeners();
+        this._emitter = null;
         this._onError = null;
         this._onMediaInfo = null;
         this._onMetaDataArrived = null;
         this._onScriptDataArrived = null;
         this._onTrackMetadata = null;
         this._onDataAvailable = null;
+    }
+
+    on(event, listener) {
+        this._emitter.addListener(event, listener);
     }
 
     static probe(buffer) {
@@ -342,8 +351,10 @@ class FLVDemuxer {
                     this._parseAudioData(chunk, dataOffset, dataSize, timestamp);
                     break;
                 case 9:  // Video
-                    if (this.firstParseTimestamp === null)
+                    if (this.firstParseTimestamp === null) {
                         this.firstParseTimestamp = timestamp;
+                        this._emitter.emit(DemuxerEvents.FIRST_VIDEO_TAG_ARRIVED, timestamp);
+                    }
                     this._parseVideoData(chunk, dataOffset, dataSize, timestamp, byteStart + offset);
                     break;
                 case 18:  // ScriptDataObject

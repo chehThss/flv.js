@@ -26,6 +26,7 @@ import DemuxErrors from '../demux/demux-errors.js';
 import IOController from '../io/io-controller.js';
 import TransmuxingEvents from './transmuxing-events.js';
 import {LoaderStatus, LoaderErrors} from '../io/loader.js';
+import DemuxerEvents from '../demux/demuxer-events.js';
 
 // Transmuxing (IO, Demuxing, Remuxing) controller, with multipart support
 class TransmuxingController {
@@ -267,6 +268,9 @@ class TransmuxingController {
             this._demuxer.onMediaInfo = this._onMediaInfo.bind(this);
             this._demuxer.onMetaDataArrived = this._onMetaDataArrived.bind(this);
             this._demuxer.onScriptDataArrived = this._onScriptDataArrived.bind(this);
+            this._demuxer.on(DemuxerEvents.FIRST_VIDEO_TAG_ARRIVED, timestamp => {
+                this._emitter.emit(TransmuxingEvents.FIRST_VIDEO_TAG_ARRIVED, timestamp);
+            });
 
             this._remuxer.bindDataSource(this._demuxer
                          .bindDataSource(this._ioctl
