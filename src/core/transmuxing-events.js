@@ -28,7 +28,8 @@ const TransmuxingEvents = {
     SCRIPTDATA_ARRIVED: 'scriptdata_arrived',
     STATISTICS_INFO: 'statistics_info',
     RECOMMEND_SEEKPOINT: 'recommend_seekpoint',
-    FIRST_VIDEO_TAG_ARRIVED: 'first_video_tag_arrived'
+    FIRST_VIDEO_TAG_ARRIVED: 'first_video_tag_arrived',
+    VIDEO_TAG_ARRIVED: 'video_tag_arrived'
 };
 
 export default TransmuxingEvents;

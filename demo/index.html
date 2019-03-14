@@ -108,6 +108,7 @@
                 enableWorker: false,
                 lazyLoadMaxDuration: 3 * 60,
                 seekType: 'range',
+                enableStashBuffer: false
             });
             player.on(flvjs.Events.METADATA_ARRIVED, meta => {
                 creationTime = Date.parse(meta.creation_time);

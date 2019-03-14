@@ -248,6 +248,9 @@ class FlvPlayer {
         this._transmuxer._controller.on(TransmuxingEvents.FIRST_VIDEO_TAG_ARRIVED, timestamp => {
             this._emitter.emit(PlayerEvents.FIRST_VIDEO_TAG_ARRIVED, timestamp);
         });
+        this._transmuxer._controller.on(TransmuxingEvents.VIDEO_TAG_ARRIVED, timestamp => {
+            this._emitter.emit(PlayerEvents.VIDEO_TAG_ARRIVED, timestamp);
+        });
         this._transmuxer.on(TransmuxingEvents.SCRIPTDATA_ARRIVED, (data) => {
             this._emitter.emit(PlayerEvents.SCRIPTDATA_ARRIVED, data);
         });

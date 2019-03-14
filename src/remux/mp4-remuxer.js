@@ -424,6 +424,7 @@ class MP4Remuxer {
                 let lastFrame = silentFrames[silentFrames.length - 1];
                 lastFrame.duration = dts + sampleDuration - lastFrame.dts;
 
+
                 // silentFrames.forEach((frame) => {
                 //     Log.w(this.TAG, `SilentAudio: dts: ${frame.dts}, duration: ${frame.duration}`);
                 // });

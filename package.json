@@ -22,6 +22,7 @@
     "dtslint": "dtslint types"
   },
   "dependencies": {
+    "acorn": "^6.1.1",
     "es6-promise": "^4.2.5",
     "webworkify": "^1.5.0"
   },

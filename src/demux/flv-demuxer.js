@@ -277,6 +277,7 @@ class FLVDemuxer {
 
     // function parseChunks(chunk: ArrayBuffer, byteStart: number): number;
     parseChunks(chunk, byteStart) {
+        //console.log('parse=' + Date.now());
         if (!this._onError || !this._onMediaInfo || !this._onTrackMetadata || !this._onDataAvailable) {
             throw new IllegalStateException('Flv: onError & onMediaInfo & onTrackMetadata & onDataAvailable callback must be specified');
         }
@@ -355,10 +356,12 @@ class FLVDemuxer {
                         this.firstParseTimestamp = timestamp;
                         this._emitter.emit(DemuxerEvents.FIRST_VIDEO_TAG_ARRIVED, timestamp);
                     }
+                    this._emitter.emit(DemuxerEvents.VIDEO_TAG_ARRIVED, timestamp);
                     this._parseVideoData(chunk, dataOffset, dataSize, timestamp, byteStart + offset);
                     break;
                 case 18:  // ScriptDataObject
-                    this._parseScriptData(chunk, dataOffset + 12, dataSize);
+                    console.log('script data arrived');
+                    this._parseScriptData(chunk, dataOffset + 12, dataSize - 8);
                     break;
             }
 

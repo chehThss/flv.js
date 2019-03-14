@@ -271,6 +271,9 @@ class TransmuxingController {
             this._demuxer.on(DemuxerEvents.FIRST_VIDEO_TAG_ARRIVED, timestamp => {
                 this._emitter.emit(TransmuxingEvents.FIRST_VIDEO_TAG_ARRIVED, timestamp);
             });
+            this._demuxer.on(DemuxerEvents.VIDEO_TAG_ARRIVED, timestamp => {
+                this._emitter.emit(TransmuxingEvents.VIDEO_TAG_ARRIVED, timestamp);
+            });
 
             this._remuxer.bindDataSource(this._demuxer
                          .bindDataSource(this._ioctl
