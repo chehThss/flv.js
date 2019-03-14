@@ -119,6 +119,13 @@
                     document.getElementById('videoTime').innerText = (new Date(milltime)) + (milltime);
                 }, 25)
             });
+            
+            player.on(flvjs.Events.VIDEO_TAG_ARRIVED, timestamp => {
+                setInterval(() => {
+                    let milltime = creationTime + timestamp;
+                    document.getElementById('videoTime').innerText = new Date(milltime));
+                }, 25)
+            });
             player.attachMediaElement(element);
             player.load();
         }
