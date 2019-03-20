@@ -360,8 +360,8 @@ class FLVDemuxer {
                     this._parseVideoData(chunk, dataOffset, dataSize, timestamp, byteStart + offset);
                     break;
                 case 18:  // ScriptDataObject
-                    console.log('script data arrived');
-                    this._parseScriptData(chunk, dataOffset + 12, dataSize - 8);
+                    let unknownDataSize = 12;
+                    this._parseScriptData(chunk, dataOffset + unknownDataSize, dataSize - unknownDataSize);
                     break;
             }
 
